@@ -1,0 +1,36 @@
+version: "1.0"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  todo-service:
+    build: .
+    image: todobackend
+    container_name: todo-service
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
+    driver: bridge
