@@ -32,7 +32,9 @@ jobs:
         EOF
     - name: Deploy app
       run: |
-        cd /home/ec2-user/ToDo
-        pm2 restart todo-app || pm2 start src/app.js --name todo-app
+        cd $GITHUB_WORKSPACE
+        npm install
+        node src/app.js
+
 
 
