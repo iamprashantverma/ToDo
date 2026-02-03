@@ -15,6 +15,10 @@ fastify.get("/:name", async (request) => {
   return { message: `Hello ${name}` };
 });
 
+fastify.get("/welcome",async(request)=>{
+  return {message:"Welcome to GitHub Actions"};
+})
+
 // Start server
 const start = async () => {
   try {
