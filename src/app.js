@@ -19,9 +19,11 @@ fastify.get("/welcome",async(request)=>{
   return {message:"Welcome to GitHub Actions"};
 })
 
-fastify.get("/sum/:a/:b",async(request)=>{
-  return{sum:a + b};
-})
+fastify.get("/sum/:a/:b", async (request) => {
+  const { a, b } = request.params;
+  return { sum: Number(a) + Number(b) };
+});
+
 // Start server
 const start = async () => {
   try {
