@@ -1,40 +1,32 @@
 require("dotenv").config();
-const app = require("fastify")({
-    logger:{
-        level:process.env.LOG_LEVEL || "info"
-    },
-    ajv:{
-        plugins:[require("ajv-errors")],
-        customOptions:{
-            allErrors:true
-        }
-    }
-})
-app.register(require("@fastify/cors"),{
-    origin:true,
-})
-app.register(require("./plugins/sequelize.plugin"));
-app.register(require("./plugins/jwt.plugin"));  
-app.register(require("./plugins/auth.plugin")); 
-app.register(require("./plugins/ajv.plugin"));
-app.register(require("./plugins/error-handler.plugin"));
 
-app.register(require("./routes/health.route"), { prefix: "/api/health" });
-app.register(require("./routes/auth.route"), { prefix: "/api/auth" });
-app.register(require("./routes/task.route"), { prefix: "/api/task" });
+const fastify = require("fastify")({
+  logger: true
+});
 
+
+fastify.get("/", async () => {
+  return { message: "Hello, Good Morning" };
+});
+
+// Get name
+fastify.get("/:name", async (request) => {
+  const { name } = request.params;
+  return { message: `Hello ${name}` };
+});
+
+// Start server
 const start = async () => {
   try {
-    await app.listen({
+    await fastify.listen({
       port: Number(process.env.PORT) || 3000,
-      host: "0.0.0.0",
+      host: "0.0.0.0"
     });
+    console.log(`Server running on port ${process.env.PORT || 3000}`);
   } catch (err) {
-    app.log.error(err);
+    fastify.log.error(err);
     process.exit(1);
   }
 };
 
 start();
-
-module.exports = app;
