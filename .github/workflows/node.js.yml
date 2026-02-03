@@ -33,8 +33,6 @@ jobs:
     - name: Deploy app
       run: |
         cd $GITHUB_WORKSPACE
-        npm install
-        node src/app.js
-
+        pm2 restart todo-app || pm2 start src/app.js --name todo-app
 
 
